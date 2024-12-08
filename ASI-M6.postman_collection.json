@@ -1,0 +1,298 @@
+{
+	"info": {
+		"_postman_id": "54396996-4542-499e-8b29-209c979f2f98",
+		"name": "ASI-M6",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18382090"
+	},
+	"item": [
+		{
+			"name": "LojaA",
+			"item": [
+				{
+					"name": "Get health",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Create new Story",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Loja A\",\r\n    \"url\": \"http://lojaa.com\",\r\n    \"port\": 8086\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8086/order-storeA/createStore",
+							"host": [
+								"localhost"
+							],
+							"port": "8086",
+							"path": [
+								"order-storeA",
+								"createStore"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new Product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\":\"123e4567-e89b-12d3-a456-426614174000\",  \r\n  \"name\": \"Melão\",                    \r\n  \"description\": \"Produto da Loja A\",  \r\n  \"price\": 199.99,                              \r\n  \"stockQuantity\": 50,                          \r\n  \"storeId\": \"3a83f29c-7baa-46fd-9169-656037e43d8a\" \r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8086/create-product",
+							"host": [
+								"localhost"
+							],
+							"port": "8086",
+							"path": [
+								"create-product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8085/get-products/",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"get-products",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Store",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8086/get-stores",
+							"host": [
+								"localhost"
+							],
+							"port": "8086",
+							"path": [
+								"get-stores"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product By ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8086/delete-product/08199b7c-b970-4935-9b30-8ce7a121a37d",
+							"host": [
+								"localhost"
+							],
+							"port": "8086",
+							"path": [
+								"delete-product",
+								"08199b7c-b970-4935-9b30-8ce7a121a37d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"method": "PUT",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Store By ID",
+					"request": {
+						"method": "DELETE",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "LojaB",
+			"item": [
+				{
+					"name": "Get health",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Create new Story",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Loja A\",\r\n    \"url\": \"http://lojaa.com\",\r\n    \"port\": 8080\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8085/order-storeB/createStore",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"order-storeB",
+								"createStore"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new Product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    [{\r\n        \"id\":\"f9a8a3fd-7849-465a-b4f2-a14e886bcf33\",\r\n        \"name\": \"Manga\",                    \r\n        \"description\": \"Produto da Loja B\",  \r\n        \"price\": 199.99,                              \r\n        \"stockQuantity\": 50,                          \r\n        \"storeId\": \"abaac79e-349b-470f-a978-ee2ab366d88e\" \r\n    },\r\n    {\r\n        \"id\":\"e1d18e54-017b-4a93-b051-5dd96bc0befb\",\r\n        \"name\": \"Laranja de faro\",                    \r\n        \"description\": \"Produto da Loja B\",  \r\n        \"price\": 199.99,                              \r\n        \"stockQuantity\": 50,                          \r\n        \"storeId\": \"abaac79e-349b-470f-a978-ee2ab366d88e\" \r\n\r\n    }\r\n]\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8085/create-product",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"create-product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Products",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Store",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product By ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"method": "PUT",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Store By ID",
+					"request": {
+						"method": "DELETE",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Stock with Replication",
+			"item": [
+				{
+					"name": "Get all Store",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Products",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <excludeFromCompile>
+      <directory url="file://$PROJECT_DIR$/storeB/src/main/resources/archetype-resources" includeSubdirectories="true" />
+    </excludeFromCompile>
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="m4saga (6)" />
+        <module name="m4saga (5)" />
+        <module name="m4saga (4)" />
+        <module name="m4saga" />
+        <module name="m4saga (2)" />
+      </profile>
+      <profile name="Annotation profile for saga-demo" enabled="true">
+        <sourceOutputDir name="../stock/target/generated-sources/annotations" />
+        <sourceTestOutputDir name="../stock/target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="m4saga (1)" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="stock" target="1.8" />
+      <module name="storeB" target="1.8" />
+      <module name="storeDB" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="m4saga" options="-parameters" />
+      <module name="m4saga (1)" options="-parameters" />
+      <module name="m4saga (2)" options="" />
+      <module name="m4saga (3)" options="" />
+      <module name="m4saga (5)" options="-parameters" />
+      <module name="stock" options="-parameters" />
+      <module name="storeB" options="-parameters" />
+      <module name="storeDB" options="-parameters" />
+    </option>
+  </component>
+</project>
