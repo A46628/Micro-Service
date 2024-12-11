@@ -5,7 +5,7 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE lojas (
-    id_loja UUID PRIMARY KEY ,
+    id_loja UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     nome_loja VARCHAR(100) NOT NULL,
     url_loja VARCHAR(100) NOT NULL,
     port INT NOT NULL
@@ -21,7 +21,7 @@ CREATE TABLE clientes (
 );
 
 CREATE TABLE produtos (
-    id_produto UUID PRIMARY KEY,
+    id_produto UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     nome_produto VARCHAR(100) NOT NULL,
     descricao_produto VARCHAR(255),
     id_loja UUID,
