@@ -36,6 +36,7 @@ public class OrderService {
                 ))
                 .toList();
     }
+    
 
     public List<StoreMessage> getAllStores() {
         List<Store> lojas = storeRepository.findAll();
@@ -48,4 +49,5 @@ public class OrderService {
                 ))
                 .toList();
     }
+
 }

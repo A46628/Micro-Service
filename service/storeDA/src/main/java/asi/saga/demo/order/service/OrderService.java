@@ -35,6 +35,8 @@ public class OrderService {
      * @return
      */
 
+
+
     public MessageInfo createStore(StoreMessage storeMessage) {
         Store store = new Store(storeMessage.getId(),storeMessage.getName(),storeMessage.getUrl(), storeMessage.getPort() );
         storeRepository.save(store);
@@ -43,6 +45,9 @@ public class OrderService {
         return new MessageInfo(true, "Loja criada com sucesso!");
     }
 
+    /**
+     * 
+     */
 
     public MessageInfo createProduct(List<ProductMessage> productMessages) {
         for(ProductMessage productMessage : productMessages){
