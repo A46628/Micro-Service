@@ -1,14 +1,12 @@
 -- 04_headquartersDB_tables.sql
 
-\c headquartersdb;
+\c headquarters;
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE lojas (
-    id_loja UUID PRIMARY KEY ,
-    nome_loja VARCHAR(100) NOT NULL,
-    url_loja VARCHAR(100) NOT NULL,
-    port INT NOT NULL
+    id_loja UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    nome_loja VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE clientes (
@@ -20,16 +18,13 @@ CREATE TABLE clientes (
 );
 
 CREATE TABLE produtos (
-    id_produto UUID PRIMARY KEY ,
+    id_produto UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     nome_produto VARCHAR(100) NOT NULL,
     descricao_produto VARCHAR(255),
     id_loja UUID,
-    stockQuantity INT NOT NULL, 
-
     --preco_produto DECIMAL(10, 2),
     CONSTRAINT fk_produtos_lojas FOREIGN KEY (id_loja) REFERENCES lojas(id_loja)
 );
-
 
 CREATE TABLE vendas (
     id_venda UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
