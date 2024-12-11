@@ -1,17 +1,64 @@
 version: '3'
 services:
-  database:
+  lojaA:
     image: postgres:15
-    container_name: asi_psql
+    container_name: asi_lojaA
     restart: always
     ports:
-      - "5432:5432"  # Permite conexões de qualquer lugar
-    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+      - "5433:5432"
+    environment:
+      POSTGRES_PASSWORD: asi_lojaA
+      POSTGRES_DB: lojaAdb
     volumes:
-      - ./data:/var/lib/postgresql/data
+      - ./data_lojaA:/var/lib/postgresql/data
       - ./my-postgres.conf:/etc/postgresql/postgresql.conf
       - ./pg_hba.conf:/etc/postgresql/pg_hba.conf
-      - ./setup-master:/docker-entrypoint-initdb.d
+      - ./setup-masterlojaAdb:/docker-entrypoint-initdb.d
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  lojaB:
+    image: postgres:15
+    container_name: asi_lojaB
+    restart: always
+    ports:
+      - "5434:5432"
     environment:
-      - 'POSTGRES_PASSWORD=a_passwd234'
-      - 'POSTGRES_DB=asi_sales'
+      POSTGRES_PASSWORD: asi_lojaB
+      POSTGRES_DB: lojaBdb
+    volumes:
+      - ./data_lojaB:/var/lib/postgresql/data
+      - ./my-postgres.conf:/etc/postgresql/postgresql.conf
+      - ./pg_hba.conf:/etc/postgresql/pg_hba.conf
+      - ./setup-masterlojaBdb:/docker-entrypoint-initdb.d
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  headquarters:
+    image: postgres:15
+    container_name: asi_headquarters
+    restart: always
+    depends_on:
+      lojaA:
+        condition: service_healthy
+      lojaB:
+        condition: service_healthy
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_PASSWORD: asi_headquarters
+      POSTGRES_DB: headquartersdb
+    volumes:
+      - ./data_headquarters:/var/lib/postgresql/data
+      - ./pg_hba.conf:/etc/postgresql/pg_hba.conf
+      - ./my-postgres.conf:/etc/postgresql/postgresql.conf
+      - ./setup-masterheadquarters:/docker-entrypoint-initdb.d
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
