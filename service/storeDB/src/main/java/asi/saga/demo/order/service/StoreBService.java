@@ -16,9 +16,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class OrderService {
+public class StoreBService {
 
-    private final Logger logger = LoggerFactory.getLogger(OrderService.class);
+    private final Logger logger = LoggerFactory.getLogger(StoreBService.class);
 
     @Autowired
     private LocalStockRepository localStockRepository;
@@ -54,7 +54,7 @@ public class OrderService {
         return new MessageInfo(true, "Produto criado com sucesso!");
     }
 
-    public boolean updateProduct(List<ProductMessage> productMessages) {
+    public boolean updateProduct(List<ProductMessage> productMessages, Boolean upDr) {
 
         for(ProductMessage productMessage : productMessages){
             Optional<Product> productOpt = productRepository.findById(productMessage.getId());
@@ -62,7 +62,12 @@ public class OrderService {
                 Product product = productOpt.get();
                 product.setName(productMessage.getName());
                 product.setDescription(productMessage.getDescription());
-                product.setStockQuantity(productMessage.getStockQuantity() + product.getStockQuantity());
+                if(upDr){
+                    product.setStockQuantity(productMessage.getStockQuantity() + product.getStockQuantity());
+                }else{
+                    product.setStockQuantity(product.getStockQuantity()-productMessage.getStockQuantity());
+
+                }
                 product.setId_loja(productMessage.getStoreId());
 
                 localStockRepository.save(product);
@@ -110,5 +115,29 @@ public class OrderService {
                         loja.getPort()
                 ))
                 .toList();
+    }
+
+    public boolean increaseStockAll (ProductMessage productMessage){
+        List<ProductMessage> productMessages = List.of(productMessage);
+        return updateProduct(productMessages, true);
+
+    }
+
+
+    public boolean decreaseStock (ProductMessage productMessage){
+
+        List<ProductMessage> productMessages = List.of(productMessage);
+        return updateProduct(productMessages, false);
+    }
+
+    public boolean deleteStore(UUID id){
+        if (storeRepository.existsById(id)){
+            storeRepository.deleteById(id);
+            logger.info("Store by id {} delete with success",id);
+            return true;
+        }else{
+            logger.info("Error to delete Store by id {}",id);
+            return false;
+        }
     }
 }

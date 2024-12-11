@@ -16,9 +16,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class OrderService {
+public class StoreAService {
 
-    private final Logger logger = LoggerFactory.getLogger(OrderService.class);
+    private final Logger logger = LoggerFactory.getLogger(StoreAService.class);
 
     @Autowired
     private LocalStockRepository localStockRepository;
@@ -35,8 +35,6 @@ public class OrderService {
      * @return
      */
 
-
-
     public MessageInfo createStore(StoreMessage storeMessage) {
         Store store = new Store(storeMessage.getId(),storeMessage.getName(),storeMessage.getUrl(), storeMessage.getPort() );
         storeRepository.save(store);
@@ -45,9 +43,6 @@ public class OrderService {
         return new MessageInfo(true, "Loja criada com sucesso!");
     }
 
-    /**
-     * 
-     */
 
     public MessageInfo createProduct(List<ProductMessage> productMessages) {
         for(ProductMessage productMessage : productMessages){
@@ -63,15 +58,20 @@ public class OrderService {
         return new MessageInfo(true, "Produto criado com sucesso!");
     }
 
-    public boolean updateProduct(List<ProductMessage> productMessages) {
-
+    public boolean updateProduct(List<ProductMessage> productMessages, Boolean upDr) {
+        
         for(ProductMessage productMessage : productMessages){
             Optional<Product> productOpt = productRepository.findById(productMessage.getId());
             if (productOpt.isPresent()) {
                 Product product = productOpt.get();
                 product.setName(productMessage.getName());
                 product.setDescription(productMessage.getDescription());
-                product.setStockQuantity(productMessage.getStockQuantity() + product.getStockQuantity());
+                if(upDr){
+                    product.setStockQuantity(productMessage.getStockQuantity() + product.getStockQuantity());
+                }else{
+                    product.setStockQuantity(product.getStockQuantity()-productMessage.getStockQuantity());
+
+                }
                 product.setId_loja(productMessage.getStoreId());
 
                 localStockRepository.save(product);
@@ -93,6 +93,17 @@ public class OrderService {
             return true;
         } else {
             logger.warn("Product with ID {} not found to exclusion.", id);
+            return false;
+        }
+    }
+
+    public boolean deleteStore(UUID id){
+        if (storeRepository.existsById(id)){
+            storeRepository.deleteById(id);
+            logger.info("Store by id {} delete with success",id);
+            return true;
+        }else{
+            logger.info("Error to delete Store by id {}",id);
             return false;
         }
     }
@@ -122,4 +133,19 @@ public class OrderService {
                 ))
                 .toList();
     }
+
+    public boolean increaseStockAll (ProductMessage productMessage){
+        List<ProductMessage> productMessages = List.of(productMessage);
+        return updateProduct(productMessages, true);
+        
+    }
+
+
+    public boolean decreaseStock (ProductMessage productMessage){
+
+        List<ProductMessage> productMessages = List.of(productMessage);
+        return updateProduct(productMessages, false);
+    }
+
 }
+

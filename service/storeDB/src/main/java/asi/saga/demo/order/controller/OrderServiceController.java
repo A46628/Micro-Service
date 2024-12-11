@@ -27,7 +27,7 @@ import asi.saga.demo.common.model.Result;
 import asi.saga.demo.order.model.MessageInfo;
 import asi.saga.demo.order.model.ProductMessage;
 import asi.saga.demo.order.model.StoreMessage;
-import asi.saga.demo.order.service.OrderService;
+import asi.saga.demo.order.service.StoreBService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -63,7 +63,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class OrderServiceController {
     private Logger __logger = LoggerFactory.getLogger(getClass());
     @Autowired
-    private OrderService _service;
+    private StoreBService _service;
 
     @Operation(summary = "Handle a create store and product request")
     @ApiResponses(value = {
@@ -106,7 +106,7 @@ public class OrderServiceController {
     public ResponseEntity<String> updateProduct(@RequestBody List<ProductMessage> productMessage) throws Exception {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        boolean success = _service.updateProduct(productMessage);
+        boolean success = _service.updateProduct(productMessage, true);
         if (success) {
             Result res = new Result("Product updated successfully", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
             return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.OK);
@@ -127,6 +127,19 @@ public class OrderServiceController {
             return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.OK);
         }
         Result res = new Result("Error deleting product", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping("/delete-store/{id}")
+    public ResponseEntity<String> deleteStore(@PathVariable UUID id) throws Exception {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        boolean success = _service.deleteStore(id);
+        if (success) {
+            Result res = new Result("Store deleted successfully", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+            return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.OK);
+        }
+        Result res = new Result("Error deleting Store", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.NOT_FOUND);
     }
 
@@ -160,6 +173,49 @@ public class OrderServiceController {
         }
         return ResponseEntity.ok(stores);
     }
+
+    @PostMapping("/store-service/decrease")
+    public ResponseEntity<String> descreaseStock(@RequestBody ProductMessage productMessage) throws Exception {
+
+        boolean ok = _service.decreaseStock(productMessage);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        if (ok) {
+            Result res = new Result("Success", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+            return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.OK);
+        } else {
+            Result res = new Result("Error", "Some products not found or insufficient stock");
+            return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    @Operation(summary = "Increase the availability of a product in the stock")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Verification success",
+                    content = @Content(schema = @Schema(implementation = Result.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid Request")
+    })
+
+    @PostMapping("/store-service/inscrease")
+    public ResponseEntity<String> IncreaseStock(@RequestBody ProductMessage productMessage) throws Exception {
+
+        boolean isStockAvailable = _service.increaseStockAll(productMessage);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        if (isStockAvailable) {
+            Result res = new Result("Success", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+            return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.OK);
+        } else {
+            Result res = new Result("Error", "Some products not found or insufficient stock");
+            return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
 
 }

@@ -24,10 +24,10 @@ SOFTWARE.
 package asi.saga.demo.order.controller;
 
 import asi.saga.demo.common.model.Result;
-import asi.saga.demo.order.model.MessageInfo;
 import asi.saga.demo.order.model.ProductMessage;
+import asi.saga.demo.order.model.StockMessage;
 import asi.saga.demo.order.model.StoreMessage;
-import asi.saga.demo.order.service.OrderService;
+import asi.saga.demo.order.service.OrderStockService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -48,7 +48,6 @@ import org.springframework.http.ResponseEntity;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.UUID;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,9 +60,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RestController
 @RestControllerAdvice
 public class OrderServiceController {
+
+
+
     private Logger __logger = LoggerFactory.getLogger(getClass());
     @Autowired
-    private OrderService _service;
+    private OrderStockService _service;
 
     @Operation(summary = "Handle s check the product available in the stock  global store")
     @ApiResponses(value = {
@@ -100,6 +102,79 @@ public class OrderServiceController {
         }
         return ResponseEntity.ok(stores);
     }
+
+    @Operation(summary = "Verify the availability of a product in the stock")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Verification success",
+                    content = @Content(schema = @Schema(implementation = Result.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid Request")
+    })
+    @PostMapping("/stock-service/check")
+    public ResponseEntity<String> checkStock(@RequestBody List<ProductMessage> stockMessage) throws Exception {
+
+        boolean isStockAvailable = _service.areProductsInStock(stockMessage);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        if (isStockAvailable) {
+            Result res = new Result("Success", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+            return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.OK);
+        } else {
+            Result res = new Result("Error", "Some products not found or insufficient stock");
+            return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.BAD_REQUEST);
+        }
+    }
+    @Operation(summary = "Verify the availability of a product in the stock")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Verification success",
+                    content = @Content(schema = @Schema(implementation = Result.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid Request")
+    })
+    @PostMapping("/stock-service/decrease")
+    public ResponseEntity<String> descreaseStock(@RequestBody List<ProductMessage> productMessages) throws Exception {
+        __logger.info("Reservando produto no stock{}", productMessages);
+
+        boolean ok = _service.decreaseStock(productMessages);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        if (ok) {
+            Result res = new Result("Success", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+            return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.OK);
+        } else {
+            Result res = new Result("Error", "Some products not found or insufficient stock");
+            return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    @Operation(summary = "Increase the availability of a product in the stock")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Verification success",
+                    content = @Content(schema = @Schema(implementation = Result.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid Request")
+    })
+        @PostMapping("/stock-service/inscrease")
+    public ResponseEntity<String> IncreaseStock(@RequestBody List<ProductMessage> productMessages) throws Exception {
+        __logger.info("Recebido: Aumentando de estoque {}", productMessages);
+
+        boolean isStockAvailable = _service.inscreaseStockAll(productMessages);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        if (isStockAvailable) {
+            Result res = new Result("Success", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+            return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.OK);
+        } else {
+            Result res = new Result("Error", "Some products not found or insufficient stock");
+            return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
 
 }
 

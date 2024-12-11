@@ -32,9 +32,11 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="m4saga" options="-parameters" />
       <module name="m4saga (1)" options="-parameters" />
-      <module name="m4saga (2)" options="" />
+      <module name="m4saga (2)" options="-parameters" />
       <module name="m4saga (3)" options="" />
+      <module name="m4saga (4)" options="-parameters" />
       <module name="m4saga (5)" options="-parameters" />
+      <module name="m4saga (6)" options="-parameters" />
       <module name="stock" options="-parameters" />
       <module name="storeB" options="-parameters" />
       <module name="storeDB" options="-parameters" />

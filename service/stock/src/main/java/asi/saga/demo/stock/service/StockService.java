@@ -25,12 +25,14 @@ public class StockService {
         this.stockRepository = stockRepository;
     }
 
+
     public Stock addProduct(Stock stock) {
         return stockRepository.save(stock);
     }
 
 
     public boolean areProductsInStock(StockMessage stockMessages) {
+
         for (ItemList stockMessage : stockMessages.getItems()) {
             Stock stock = stockRepository.findById(stockMessage.getId());
             if (stock == null || stock.getQuantity() ==0) {

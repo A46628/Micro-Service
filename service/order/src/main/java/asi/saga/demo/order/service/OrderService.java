@@ -188,29 +188,7 @@ public class OrderService {
         }
     }
 
-    private boolean callServiceStockIncrease(OrderMessage order) {
-        __logger.info("Reserve inscrease Stock: {}", order);
-        try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI(STOCK_SERVICE_URL_INCREASE))
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(convertToJson(order.getItemLists())))
-                    .build();
 
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
-                __logger.info("Stock service increase ok: {}", response.body());
-                return true;
-            } else {
-                __logger.error("Error in reserve increase Stock: {}", response.statusCode());
-                return false;
-            }
-        } catch (Exception e) {
-            __logger.error("Error calling stock service", e);
-            return false;
-        }
-    }
 
 
 

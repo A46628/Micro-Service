@@ -13,7 +13,18 @@
 					"name": "Get health",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "localhost:8086/store-db-service/healthy",
+							"host": [
+								"localhost"
+							],
+							"port": "8086",
+							"path": [
+								"store-db-service",
+								"healthy"
+							]
+						}
 					},
 					"response": []
 				},
@@ -24,7 +35,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Loja A\",\r\n    \"url\": \"http://lojaa.com\",\r\n    \"port\": 8086\r\n}",
+							"raw": "{\r\n    \"id\":\"3c24c285-c301-4561-a944-b5ee36ec603e\",\r\n    \"name\": \"Loja A\",\r\n    \"url\": \"localhost\",\r\n    \"port\": 8086\r\n}\r\n\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -52,7 +63,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"id\":\"123e4567-e89b-12d3-a456-426614174000\",  \r\n  \"name\": \"Melão\",                    \r\n  \"description\": \"Produto da Loja A\",  \r\n  \"price\": 199.99,                              \r\n  \"stockQuantity\": 50,                          \r\n  \"storeId\": \"3a83f29c-7baa-46fd-9169-656037e43d8a\" \r\n}\r\n",
+							"raw": "[{\r\n  \"id\":\"123e4567-e89b-12d3-a456-426614174000\",  \r\n  \"name\": \"Melão\",                    \r\n  \"description\": \"Produto da Loja A\",  \r\n  \"price\": 199.99,                              \r\n  \"stockQuantity\": 50,                          \r\n  \"storeId\": \"3c24c285-c301-4561-a944-b5ee36ec603e\" \r\n}\r\n]\r\n\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -78,11 +89,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8085/get-products/",
+							"raw": "localhost:8086/get-products/",
 							"host": [
 								"localhost"
 							],
-							"port": "8085",
+							"port": "8086",
 							"path": [
 								"get-products",
 								""
@@ -115,14 +126,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:8086/delete-product/08199b7c-b970-4935-9b30-8ce7a121a37d",
+							"raw": "localhost:8086/delete-product/41d40435-e625-4c06-b8bd-4482d2d433ca",
 							"host": [
 								"localhost"
 							],
 							"port": "8086",
 							"path": [
 								"delete-product",
-								"08199b7c-b970-4935-9b30-8ce7a121a37d"
+								"41d40435-e625-4c06-b8bd-4482d2d433ca"
 							]
 						}
 					},
@@ -132,7 +143,27 @@
 					"name": "Update Product",
 					"request": {
 						"method": "PUT",
-						"header": []
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " [\r\n    {\r\n        \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\r\n        \"name\": \"Melão\",\r\n        \"description\": \"Produto da Loja A\",\r\n        \"price\": 199.99,\r\n        \"storeId\": \"3c24c285-c301-4561-a944-b5ee36ec603e\",\r\n        \"stockQuantity\": 50\r\n    }\r\n ]\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8086/update-product/8056ebd1-e3b1-4b10-87b9-23ee7412f78a",
+							"host": [
+								"localhost"
+							],
+							"port": "8086",
+							"path": [
+								"update-product",
+								"8056ebd1-e3b1-4b10-87b9-23ee7412f78a"
+							]
+						}
 					},
 					"response": []
 				},
@@ -140,15 +171,74 @@
 					"name": "Delete Store By ID",
 					"request": {
 						"method": "DELETE",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "localhost:8086/delete-store/3c24c285-c301-4561-a944-b5ee36ec603e",
+							"host": [
+								"localhost"
+							],
+							"port": "8086",
+							"path": [
+								"delete-store",
+								"3c24c285-c301-4561-a944-b5ee36ec603e"
+							]
+						}
 					},
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "increase Product",
 					"request": {
-						"method": "GET",
-						"header": []
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n    {\r\n        \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\r\n        \"name\": \"Melão\",\r\n        \"description\": \"Produto da Loja A\",\r\n        \"price\": 199.99,\r\n        \"storeId\": \"3c24c285-c301-4561-a944-b5ee36ec603e\",\r\n        \"stockQuantity\": 50\r\n    }\r\n \r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8086/store-service/inscrease",
+							"host": [
+								"localhost"
+							],
+							"port": "8086",
+							"path": [
+								"store-service",
+								"inscrease"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "decreaseProduct",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n     {\r\n        \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\r\n        \"name\": \"Melão\",\r\n        \"description\": \"Produto da Loja A\",\r\n        \"price\": 199.99,\r\n        \"storeId\": \"3c24c285-c301-4561-a944-b5ee36ec603e\",\r\n        \"stockQuantity\": 50\r\n    }\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8086/store-service/decrease",
+							"host": [
+								"localhost"
+							],
+							"port": "8086",
+							"path": [
+								"store-service",
+								"decrease"
+							]
+						}
 					},
 					"response": []
 				}
@@ -161,7 +251,18 @@
 					"name": "Get health",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "localhost:8085/store-db-service/healthy",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"store-db-service",
+								"healthy"
+							]
+						}
 					},
 					"response": []
 				},
@@ -172,7 +273,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Loja A\",\r\n    \"url\": \"http://lojaa.com\",\r\n    \"port\": 8080\r\n}",
+							"raw": "{\r\n    \"id\":\"abaac79e-349b-470f-a978-ee2ab366d88e\",\r\n    \"name\": \"Loja B\",\r\n    \"url\": \"localhost\",\r\n    \"port\": 8085\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -224,7 +325,18 @@
 					"name": "Get all Products",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "localhost:8085/get-products/",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"get-products",
+								""
+							]
+						}
 					},
 					"response": []
 				},
@@ -232,7 +344,17 @@
 					"name": "Get all Store",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "localhost:8085/get-stores",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"get-stores"
+							]
+						}
 					},
 					"response": []
 				},
@@ -242,7 +364,15 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": ""
+							"raw": "localhost:8085/delete-product/08199b7c-b970-4935-9b30-8ce7a121a37d",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"delete-product",
+								"08199b7c-b970-4935-9b30-8ce7a121a37d"
+							]
 						}
 					},
 					"response": []
@@ -251,7 +381,27 @@
 					"name": "Update Product",
 					"request": {
 						"method": "PUT",
-						"header": []
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{\r\n    \"id\": \"c2b5f467-95d3-48da-9017-533f3f8a5993\",\r\n    \"name\": \"Manga\",\r\n    \"description\": \"Produto da Loja B\",\r\n    \"price\": 199.99,\r\n    \"storeId\": \"28a4005e-104f-4bbb-8a23-68b427222c6d\",\r\n    \"stockQuantity\": 70\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8085/update-product/c2b5f467-95d3-48da-9017-533f3f8a5993",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"update-product",
+								"c2b5f467-95d3-48da-9017-533f3f8a5993"
+							]
+						}
 					},
 					"response": []
 				},
@@ -259,15 +409,73 @@
 					"name": "Delete Store By ID",
 					"request": {
 						"method": "DELETE",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "localhost:8085/",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								""
+							]
+						}
 					},
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "increase Product Copy",
 					"request": {
-						"method": "GET",
-						"header": []
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{\r\n    \"id\": \"f9a8a3fd-7849-465a-b4f2-a14e886bcf33\",\r\n    \"name\": \"Manga\",\r\n    \"description\": \"Produto da Loja B\",\r\n    \"price\": 199.99,\r\n    \"storeId\": \"abaac79e-349b-470f-a978-ee2ab366d88e\",\r\n    \"stockQuantity\": 50\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8085/store-service/inscrease",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"store-service",
+								"inscrease"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "decreaseProduct Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{\r\n    \"id\": \"f9a8a3fd-7849-465a-b4f2-a14e886bcf33\",\r\n    \"name\": \"Manga\",\r\n    \"description\": \"Produto da Loja B\",\r\n    \"price\": 199.99,\r\n    \"storeId\": \"abaac79e-349b-470f-a978-ee2ab366d88e\",\r\n    \"stockQuantity\": 50\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8085/store-service/decrease",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"store-service",
+								"decrease"
+							]
+						}
 					},
 					"response": []
 				}
@@ -280,7 +488,17 @@
 					"name": "Get all Store",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "localhost:8087/get-stores",
+							"host": [
+								"localhost"
+							],
+							"port": "8087",
+							"path": [
+								"get-stores"
+							]
+						}
 					},
 					"response": []
 				},
@@ -288,7 +506,102 @@
 					"name": "Get all Products",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "localhost:8087/get-products/",
+							"host": [
+								"localhost"
+							],
+							"port": "8087",
+							"path": [
+								"get-products",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "IncreaseProduct",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n     {\r\n        \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\r\n        \"name\": \"Melão\",\r\n        \"description\": \"Produto da Loja A\",\r\n        \"price\": 199.99,\r\n        \"storeId\": \"3c24c285-c301-4561-a944-b5ee36ec603e\",\r\n        \"stockQuantity\": 50\r\n    },\r\n     {\r\n        \"id\": \"e1d18e54-017b-4a93-b051-5dd96bc0befb\",\r\n        \"name\": \"Laranja de faro\",\r\n        \"description\": \"Produto da Loja B\",\r\n        \"storeId\": \"abaac79e-349b-470f-a978-ee2ab366d88e\",\r\n        \"stockQuantity\": 50\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8087/stock-service/inscrease",
+							"host": [
+								"localhost"
+							],
+							"port": "8087",
+							"path": [
+								"stock-service",
+								"inscrease"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "descreaseProduct",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n     {\r\n        \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\r\n        \"name\": \"Melão\",\r\n        \"description\": \"Produto da Loja A\",\r\n        \"price\": 199.99,\r\n        \"storeId\": \"3c24c285-c301-4561-a944-b5ee36ec603e\",\r\n        \"stockQuantity\": 50\r\n    },\r\n    {\r\n        \"id\": \"e1d18e54-017b-4a93-b051-5dd96bc0befb\",\r\n        \"name\": \"Laranja de faro\",\r\n        \"description\": \"Produto da Loja B\",\r\n        \"storeId\": \"abaac79e-349b-470f-a978-ee2ab366d88e\",\r\n        \"stockQuantity\": 50\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8087/stock-service/decrease",
+							"host": [
+								"localhost"
+							],
+							"port": "8087",
+							"path": [
+								"stock-service",
+								"decrease"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CheckAllProduct",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n     {\r\n        \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\r\n        \"name\": \"Melão\",\r\n        \"description\": \"Produto da Loja A\",\r\n        \"price\": 199.99,\r\n        \"storeId\": \"3c24c285-c301-4561-a944-b5ee36ec603e\",\r\n        \"stockQuantity\": 50\r\n    },\r\n     {\r\n        \"id\": \"f9a8a3fd-7849-465a-b4f2-a14e886bcf33\",\r\n        \"name\": \"Manga\",\r\n        \"description\": \"Produto da Loja B\",\r\n        \"storeId\": \"abaac79e-349b-470f-a978-ee2ab366d88e\",\r\n        \"stockQuantity\": 50\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8087/stock-service/check",
+							"host": [
+								"localhost"
+							],
+							"port": "8087",
+							"path": [
+								"stock-service",
+								"check"
+							]
+						}
 					},
 					"response": []
 				}
