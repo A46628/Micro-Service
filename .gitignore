@@ -24,7 +24,7 @@ hs_err_pid*
 replay_pid*
 
 
-# all .idea folders and their files
+# all .idea folders and their files inside it
 **/.idea/
 
 
