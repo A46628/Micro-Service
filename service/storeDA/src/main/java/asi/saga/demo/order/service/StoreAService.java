@@ -122,6 +122,21 @@ public class StoreAService {
                 .toList();
     }
 
+    public List<ProductMessage> getProdcutByName(String name){
+        List<Product> products = productRepository.findByName(name);
+        return products.stream()
+                .map(product -> new ProductMessage(
+                        product.getId(),
+                        product.getName(),
+                        product.getDescription(),
+                        product.getPrice(),
+                        product.getStockQuantity(),
+                        product.getId_loja()
+                ))
+                .toList();
+
+    }
+
     public List<StoreMessage> getAllStores() {
         List<Store> lojas = storeRepository.findAll();
         return lojas.stream()

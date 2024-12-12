@@ -241,6 +241,21 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "get product by name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "/get-productName/",
+							"path": [
+								"get-productName",
+								""
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

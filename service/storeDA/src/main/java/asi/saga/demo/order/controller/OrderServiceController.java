@@ -146,6 +146,19 @@ public class OrderServiceController {
         return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping("/get-productName/{name}")
+    public ResponseEntity<List<ProductMessage>> getProdcutByName(@PathVariable String name) {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        List<ProductMessage> products = _service.getProdcutByName(name);
+
+        if (products.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return ResponseEntity.ok(products);
+    }
+
 
     @GetMapping("/get-products")
     public ResponseEntity<List<ProductMessage>> getAllProducts() {
@@ -217,6 +230,8 @@ public class OrderServiceController {
             return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.BAD_REQUEST);
         }
     }
+
+
 
 }
 

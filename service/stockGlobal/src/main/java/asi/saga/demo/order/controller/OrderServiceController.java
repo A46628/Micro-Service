@@ -25,6 +25,7 @@ package asi.saga.demo.order.controller;
 
 import asi.saga.demo.common.model.Result;
 import asi.saga.demo.order.model.ProductMessage;
+import asi.saga.demo.order.model.ReservationResult;
 import asi.saga.demo.order.model.StockMessage;
 import asi.saga.demo.order.model.StoreMessage;
 import asi.saga.demo.order.service.OrderStockService;
@@ -132,21 +133,9 @@ public class OrderServiceController {
             @ApiResponse(responseCode = "400", description = "Invalid Request")
     })
     @PostMapping("/stock-service/decrease")
-    public ResponseEntity<String> descreaseStock(@RequestBody List<ProductMessage> productMessages) throws Exception {
+    public ResponseEntity<ReservationResult> descreaseStock(@RequestBody List<ProductMessage> productMessages) throws Exception {
         __logger.info("Reservando produto no stock{}", productMessages);
-
-        boolean ok = _service.decreaseStock(productMessages);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        if (ok) {
-            Result res = new Result("Success", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-            return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.OK);
-        } else {
-            Result res = new Result("Error", "Some products not found or insufficient stock");
-            return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.BAD_REQUEST);
-        }
+       return ResponseEntity.ok(_service.decreaseStock(productMessages));
     }
 
 
@@ -157,7 +146,7 @@ public class OrderServiceController {
             @ApiResponse(responseCode = "400", description = "Invalid Request")
     })
         @PostMapping("/stock-service/inscrease")
-    public ResponseEntity<String> IncreaseStock(@RequestBody List<ProductMessage> productMessages) throws Exception {
+    public ResponseEntity<String> IncreaseStock(@RequestBody ReservationResult productMessages) throws Exception {
         __logger.info("Recebido: Aumentando de estoque {}", productMessages);
 
         boolean isStockAvailable = _service.inscreaseStockAll(productMessages);
