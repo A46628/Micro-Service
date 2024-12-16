@@ -19,6 +19,17 @@ public class ItemList {
     @Column(name = "unit_price") // Mapeando explicitamente a coluna 'unit_price'
     private float unitPrice;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Column(name = "nome_produto", nullable = false, length = 100)
+    private String name;
+
     @ManyToOne
     @JoinColumn(name = "order_message_id") // Especificando a chave estrangeira 'order_message_id'
     private OrderMessage orderMessage;

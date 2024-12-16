@@ -11,6 +11,7 @@ public class Product {
 
 
     @Id
+    @GeneratedValue
     @Column(name = "id_produto", updatable = false, nullable = false)
     private UUID id;
 

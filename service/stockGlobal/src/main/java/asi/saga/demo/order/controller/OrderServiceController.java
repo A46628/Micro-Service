@@ -126,6 +126,26 @@ public class OrderServiceController {
             return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PostMapping("/stock-service/check0")
+    public ResponseEntity<String> checkStockO(@RequestBody StockMessage stockMessage) throws Exception {
+
+
+        boolean isStockAvailable = _service.auxAreProductsInStock(stockMessage);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        if (isStockAvailable) {
+            Result res = new Result("Success", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+            return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.OK);
+        } else {
+            Result res = new Result("Error", "Some products not found or insufficient stock");
+            return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
     @Operation(summary = "Verify the availability of a product in the stock")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Verification success",
@@ -133,9 +153,17 @@ public class OrderServiceController {
             @ApiResponse(responseCode = "400", description = "Invalid Request")
     })
     @PostMapping("/stock-service/decrease")
-    public ResponseEntity<ReservationResult> descreaseStock(@RequestBody List<ProductMessage> productMessages) throws Exception {
+    public ResponseEntity<String> descreaseStock(@RequestBody List<ProductMessage> productMessages) throws Exception {
         __logger.info("Reservando produto no stock{}", productMessages);
-       return ResponseEntity.ok(_service.decreaseStock(productMessages));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        ReservationResult reservationResult = _service.decreaseStock(productMessages);
+        if (reservationResult.isSuccess()) {
+            return new ResponseEntity<>(new ObjectMapper().writeValueAsString(reservationResult), headers, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new ObjectMapper().writeValueAsString(reservationResult), headers, HttpStatus.BAD_REQUEST);
+        }
     }
 
 

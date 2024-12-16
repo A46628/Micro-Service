@@ -1,6 +1,5 @@
 package asi.saga.demo.order.model;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 public class ProductMessage {
@@ -13,16 +12,17 @@ public class ProductMessage {
 
     private int stockQuantity;
 
-    public ProductMessage(){}
 
-    public ProductMessage(UUID id, String name, String description,int  stockQuantity) {
+
+    public ProductMessage(UUID id, String name, String description, int  stockQuantity, UUID storeId) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.storeId = storeId;
         this.stockQuantity = stockQuantity;
     }
 
-    public ProductMessage(UUID id, String name, String description,int  stockQuantity, UUID storeId) {
+    public ProductMessage(UUID id, String name, String description, int  stockQuantity) {
         this.id = id;
         this.name = name;
         this.description = description;

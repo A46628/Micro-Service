@@ -29,14 +29,9 @@ public class StoreAService {
     @Autowired
     ProductRepository productRepository;
 
-    /**
-     * this way is create the store with defined UUID,
-     * @param storeMessage
-     * @return
-     */
-
     public MessageInfo createStore(StoreMessage storeMessage) {
         Store store = new Store(storeMessage.getId(),storeMessage.getName(),storeMessage.getUrl(), storeMessage.getPort() );
+
         storeRepository.save(store);
 
         logger.info("Loja criada com sucesso: {}", store.getName());
@@ -45,21 +40,22 @@ public class StoreAService {
 
 
     public MessageInfo createProduct(List<ProductMessage> productMessages) {
-        for(ProductMessage productMessage : productMessages){
+        for (ProductMessage productMessage : productMessages){
             Product product = new Product(productMessage.getId(), productMessage.getName(),
                     productMessage.getDescription(),
                     productMessage.getPrice(),
                     productMessage.getStockQuantity(),
                     productMessage.getStoreId());
+
             productRepository.save(product);
-            logger.info("Produto criado com sucesso: {}", product.getName());
 
         }
+        logger.info("Produto criado com sucesso: {}","ok");
         return new MessageInfo(true, "Produto criado com sucesso!");
     }
 
     public boolean updateProduct(List<ProductMessage> productMessages, Boolean upDr) {
-        
+
         for(ProductMessage productMessage : productMessages){
             Optional<Product> productOpt = productRepository.findById(productMessage.getId());
             if (productOpt.isPresent()) {
@@ -97,22 +93,10 @@ public class StoreAService {
         }
     }
 
-    public boolean deleteStore(UUID id){
-        if (storeRepository.existsById(id)){
-            storeRepository.deleteById(id);
-            logger.info("Store by id {} delete with success",id);
-            return true;
-        }else{
-            logger.info("Error to delete Store by id {}",id);
-            return false;
-        }
-    }
-
     public List<ProductMessage> getAllProducts() {
         List<Product> products = productRepository.findAll();
         return products.stream()
-                .map(product -> new ProductMessage(
-                        product.getId(),
+                .map(product -> new ProductMessage(product.getId(),
                         product.getName(),
                         product.getDescription(),
                         product.getPrice(),
@@ -120,28 +104,12 @@ public class StoreAService {
                         product.getId_loja()
                 ))
                 .toList();
-    }
-
-    public List<ProductMessage> getProdcutByName(String name){
-        List<Product> products = productRepository.findByName(name);
-        return products.stream()
-                .map(product -> new ProductMessage(
-                        product.getId(),
-                        product.getName(),
-                        product.getDescription(),
-                        product.getPrice(),
-                        product.getStockQuantity(),
-                        product.getId_loja()
-                ))
-                .toList();
-
     }
 
     public List<StoreMessage> getAllStores() {
         List<Store> lojas = storeRepository.findAll();
         return lojas.stream()
-                .map(loja -> new StoreMessage(
-                        loja.getId(),
+                .map(loja -> new StoreMessage(loja.getId(),
                         loja.getName(),
                         loja.getUrl(),
                         loja.getPort()
@@ -152,7 +120,7 @@ public class StoreAService {
     public boolean increaseStockAll (ProductMessage productMessage){
         List<ProductMessage> productMessages = List.of(productMessage);
         return updateProduct(productMessages, true);
-        
+
     }
 
 
@@ -162,5 +130,14 @@ public class StoreAService {
         return updateProduct(productMessages, false);
     }
 
+    public boolean deleteStore(UUID id){
+        if (storeRepository.existsById(id)){
+            storeRepository.deleteById(id);
+            logger.info("Store by id {} delete with success",id);
+            return true;
+        }else{
+            logger.info("Error to delete Store by id {}",id);
+            return false;
+        }
+    }
 }
-

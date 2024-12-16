@@ -13,6 +13,17 @@ public class ItemList {
     @Column(name = "description") // Mapeando explicitamente a coluna 'description'
     private String description;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Column(name = "nome_produto", nullable = false, length = 100)
+    private String name;
+
     @Column(name = "quantity") // Mapeando explicitamente a coluna 'quantity'
     private int quantity;
 

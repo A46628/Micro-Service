@@ -73,7 +73,7 @@ public class OrderServiceController {
     })
 
 
-    @PostMapping("/order-storeA/createStore")
+    @PostMapping("/order-storeB/createStore")
     public ResponseEntity<String> createRequest(@RequestBody StoreMessage storeMessage) throws Exception {
 
         HttpHeaders headers = new HttpHeaders();
@@ -102,7 +102,6 @@ public class OrderServiceController {
 
     }
 
-
     @PutMapping("/update-product/{id}")
     public ResponseEntity<String> updateProduct(@RequestBody List<ProductMessage> productMessage) throws Exception {
         HttpHeaders headers = new HttpHeaders();
@@ -115,21 +114,6 @@ public class OrderServiceController {
         Result res = new Result("Error updating product", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.NOT_FOUND);
     }
-
-
-    @DeleteMapping("/delete-store/{id}")
-    public ResponseEntity<String> deleteStore(@PathVariable UUID id) throws Exception {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        boolean success = _service.deleteStore(id);
-        if (success) {
-            Result res = new Result("Store deleted successfully", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-            return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.OK);
-        }
-        Result res = new Result("Error deleting Store", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-        return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.NOT_FOUND);
-    }
-
 
 
 
@@ -146,18 +130,19 @@ public class OrderServiceController {
         return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/get-productName/{name}")
-    public ResponseEntity<List<ProductMessage>> getProdcutByName(@PathVariable String name) {
-
+    @DeleteMapping("/delete-store/{id}")
+    public ResponseEntity<String> deleteStore(@PathVariable UUID id) throws Exception {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        List<ProductMessage> products = _service.getProdcutByName(name);
-
-        if (products.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        boolean success = _service.deleteStore(id);
+        if (success) {
+            Result res = new Result("Store deleted successfully", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+            return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.OK);
         }
-        return ResponseEntity.ok(products);
+        Result res = new Result("Error deleting Store", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.NOT_FOUND);
     }
+
 
 
     @GetMapping("/get-products")
@@ -172,6 +157,7 @@ public class OrderServiceController {
         }
         return ResponseEntity.ok(products);
     }
+
 
 
     @GetMapping("/get-stores")
@@ -204,7 +190,6 @@ public class OrderServiceController {
             return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.BAD_REQUEST);
         }
     }
-
 
 
     @Operation(summary = "Increase the availability of a product in the stock")

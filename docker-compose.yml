@@ -1,0 +1,94 @@
+version: '3'
+services:
+  lojaA:
+    image: postgres:15
+    container_name: asi_lojaA
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_PASSWORD: asi_lojaA
+      POSTGRES_DB: lojaAdb
+    volumes:
+      - ./replication/data_lojaA:/var/lib/postgresql/data
+      - ./replication/my-postgres.conf:/etc/postgresql/postgresql.conf
+      - ./replication/pg_hba.conf:/etc/postgresql/pg_hba.conf
+      - ./replication/setup-masterlojaAdb:/docker-entrypoint-initdb.d
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  lojaB:
+    image: postgres:15
+    container_name: asi_lojaB
+    restart: always
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_PASSWORD: asi_lojaB
+      POSTGRES_DB: lojaBdb
+    volumes:
+      - ./replication/data_lojaB:/var/lib/postgresql/data
+      - ./replication/my-postgres.conf:/etc/postgresql/postgresql.conf
+      - ./replication/pg_hba.conf:/etc/postgresql/pg_hba.conf
+      - ./replication/setup-masterlojaBdb:/docker-entrypoint-initdb.d
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  headquarters:
+    image: postgres:15
+    container_name: asi_headquarters
+    restart: always
+    depends_on:
+      lojaA:
+        condition: service_healthy
+      lojaB:
+        condition: service_healthy
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_PASSWORD: asi_headquarters
+      POSTGRES_DB: headquartersdb
+    volumes:
+      - ./replication/data_headquarters:/var/lib/postgresql/data
+      - ./replication/pg_hba.conf:/etc/postgresql/pg_hba.conf
+      - ./replication/my-postgres.conf:/etc/postgresql/postgresql.conf
+      - ./replication/setup-masterheadquarters:/docker-entrypoint-initdb.d
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+  
+  databasePayment:
+    image: postgres:15
+    container_name: payment_db
+    restart: always
+    ports:
+      - "127.0.0.1:5450:5432"
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    volumes:
+      - ./service/payment/data:/var/lib/postgresql/data
+      - ./service/payment/my-postgres.conf:/etc/postgresql/postgresql.conf
+      - ./service/payment/setup-master:/docker-entrypoint-initdb.d
+    environment:
+      - 'POSTGRES_PASSWORD=a_passwd234'
+      - 'POSTGRES_DB=payment_service'
+
+  databaseOrder:
+    image: postgres:15
+    container_name: order_db
+    restart: always
+    ports:
+      - "127.0.0.1:5432:5432"
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    volumes:
+      - ./service/order/data:/var/lib/postgresql/data
+      - ./service/order/my-postgres.conf:/etc/postgresql/postgresql.conf
+      - ./service/order/setup-master:/docker-entrypoint-initdb.d
+    environment:
+      - 'POSTGRES_PASSWORD=a_passwd234'
+      - 'POSTGRES_DB=order_service'

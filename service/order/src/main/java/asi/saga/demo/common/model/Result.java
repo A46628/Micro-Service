@@ -24,15 +24,8 @@ SOFTWARE.
 package asi.saga.demo.common.model;
 
 public class Result {
-    public Boolean getCheck() {
-        return check;
-    }
 
-    public void setCheck(Boolean check) {
-        this.check = check;
-    }
 
-    private Boolean check;
     private String status;
     private String datetime;
 
@@ -51,12 +44,10 @@ public class Result {
     public Result(String status, String datetime, Boolean check) {
         this.status = status;
         this.datetime = datetime;
-        this.check = check;
     }
     public Result(String status, String datetime) {
         this.status = status;
         this.datetime = datetime;
-        this.check = check;
     }
 
     public void setStatus(String status) {

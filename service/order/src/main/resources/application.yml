@@ -1,7 +1,7 @@
 spring:
   debug: true
   datasource:
-    url: jdbc:postgresql://192.168.0.10:5433/order_service
+    url: jdbc:postgresql://192.168.56.101:5437/order_service
     username: postgres
     password: a_passwd234
     jpa:
@@ -21,4 +21,4 @@ logging:
     org.hibernate.SQL: DEBUG
     root: DEBUG
 server:
-  port : 8085
+  port : 8088

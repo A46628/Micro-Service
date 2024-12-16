@@ -84,11 +84,7 @@ public class OrderServiceController {
             Result res = new Result("Success", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
             return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.OK);
         }else {
-            if (messageInfo.getError()) {
-                Result res = new Result("Error stock", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-                return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.FOUND);
-            }
-            Result res = new Result("Error paymment without Credit", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+            Result res = new Result(messageInfo.getMessage(), LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
             return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.FOUND);
 
 
@@ -98,8 +94,7 @@ public class OrderServiceController {
 
     @GetMapping("/order-service/{sagaId}")
     public ResponseEntity<String> createRequest(@PathVariable String sagaId) throws Exception {
-        // process the object
-        _service.getSaga(sagaId);
+
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

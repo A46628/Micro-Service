@@ -14,11 +14,6 @@
         <module name="m4saga (4)" />
         <module name="m4saga" />
         <module name="m4saga (2)" />
-      </profile>
-      <profile name="Annotation profile for saga-demo" enabled="true">
-        <sourceOutputDir name="../stock/target/generated-sources/annotations" />
-        <sourceTestOutputDir name="../stock/target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
         <module name="m4saga (1)" />
       </profile>
     </annotationProcessing>

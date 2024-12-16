@@ -13,6 +13,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,15 +56,17 @@ public class OrderStockService {
                 .toList();
     }
 
+    //    public ProductMessage(UUID id, String name, String description,int  stockQuantity, UUID storeId) {
+    public boolean auxAreProductsInStock(StockMessage stockMessage){
+        List<ProductMessage> productMessages = new ArrayList<>();
+        for (ItemList itemList : stockMessage.getItems()){
+            productMessages.add(new ProductMessage(itemList.getId(),itemList.getName(),itemList.getDescription(),itemList.getQuantity()));
+        }
+        return areProductsInStock(productMessages);
+    }
+
     public boolean areProductsInStock(List<ProductMessage> productMessage){
         for(ProductMessage itemList  : productMessage){
-            /*
-                change the way the consulting the database,
-                em vez de consultar a base de dados, por id consultar os produtos,
-                por nome e não por id, assim fica mais facil a configurações dos dados,
-                depois de consultar pelo nome acho que nesse caso retorna um conjunto de lojas e é necessario tentar consultar em apenas um se form bem sucessido
-                tem que mudar o id ou adicionar o id na resposta de mo
-             */
             List<Product> product = productRepository.findByName(itemList.getName());
             if(product.isEmpty())
                 return false;
@@ -78,6 +81,7 @@ public class OrderStockService {
             if (product.isPresent()){
                 Optional<Store> store = storeRepository.findById(product.get().getId_loja());
                 try {
+
                     HttpRequest request = HttpRequest.newBuilder()
                             .uri(new URI("http://"+ store.get().getUrl()+":"+store.get().getPort()+"/store-service/inscrease"))
                             .header("Content-Type", "application/json")
@@ -111,10 +115,16 @@ public class OrderStockService {
                 if (product.getStockQuantity() > 0) {
                     Optional<Store> store = storeRepository.findById(product.getId_loja());
                     if (store.isPresent()) {
-                        System.out.println("vendo a loja de saida do stock " + store.toString());
-                        System.out.println("headQuarters other now #########################################################");
+                        System.out.println("Tentando reservar estoque na loja: " + store.get().toString());
                         try {
-                            ProductMessage productMessageDe = new ProductMessage(product.getId(),product.getName(), product.getDescription(),itemList.getStockQuantity(),product.getId_loja());
+                            ProductMessage productMessageDe = new ProductMessage(
+                                    product.getId(),
+                                    product.getName(),
+                                    product.getDescription(),
+                                    itemList.getStockQuantity(),
+                                    product.getId_loja()
+                            );
+
                             HttpRequest request = HttpRequest.newBuilder()
                                     .uri(new URI("http://" + store.get().getUrl() + ":" + store.get().getPort() + "/store-service/decrease"))
                                     .header("Content-Type", "application/json")
@@ -123,26 +133,32 @@ public class OrderStockService {
 
                             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
                             if (response.statusCode() == 200) {
-                                System.out.println("Resutado do check vendo informações");
+                                System.out.println("Reserva realizada com sucesso.");
                                 itemList.setId(product.getId());
                                 reservationResult.addReservedProduct(productMessageDe);
                                 reservado = true;
                                 break;
+                            } else {
+                                System.out.println("Falha na reserva: " + response.statusCode());
                             }
                         } catch (Exception e) {
-                            System.err.println("Erro ao tentar reservar na loja: " + store.get().getUrl() + " - " + e.getMessage());
+                            System.err.println("Erro ao tentar reservar na loja: " + store.get().getUrl() + " - " + store.get().getPort());
                         }
                     }
                 }
             }
+
             if (!reservado) {
+                System.out.println("Não foi possível reservar o produto: " + itemList.getName());
                 resultReserve = false;
                 break;
             }
         }
+
         reservationResult.setSuccess(resultReserve);
         return reservationResult;
     }
+
 
 
 

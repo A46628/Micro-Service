@@ -1,11 +1,11 @@
--- 02_lojaAdb_tables.sql
+-- 03_lojaBdb_tables.sql
 
-\c lojaAdb;
+\c lojaBdb;
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE lojas (
-    id_loja UUID PRIMARY KEY ,
+    id_loja UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     nome_loja VARCHAR(100) NOT NULL,
     url_loja VARCHAR(100) NOT NULL,
     port INT NOT NULL
@@ -21,7 +21,7 @@ CREATE TABLE clientes (
 );
 
 CREATE TABLE produtos (
-    id_produto UUID PRIMARY KEY ,
+    id_produto UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     nome_produto VARCHAR(100) NOT NULL,
     descricao_produto VARCHAR(255),
     id_loja UUID,
@@ -29,6 +29,7 @@ CREATE TABLE produtos (
     preco_produto DECIMAL(10, 2),
     CONSTRAINT fk_produtos_lojas FOREIGN KEY (id_loja) REFERENCES lojas(id_loja)
 );
+
 
 CREATE TABLE produtos_lojas(
         id_produtos_lojas UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -50,4 +51,3 @@ CREATE TABLE vendas (
     CONSTRAINT fk_vendas_clientes FOREIGN KEY (nif_cliente) REFERENCES clientes(nif_cliente),
     CONSTRAINT fk_vendas_produtos FOREIGN KEY (id_produto) REFERENCES produtos(id_produto)
 );
-

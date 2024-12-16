@@ -10,6 +10,7 @@ import javax.persistence.*;
 
 public class Store {
     @Id
+    @GeneratedValue
     @Column(name = "id_loja", updatable = false, nullable = false)
     private UUID id;
 

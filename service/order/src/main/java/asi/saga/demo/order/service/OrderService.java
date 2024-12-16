@@ -23,21 +23,21 @@ import java.util.UUID;
 @Service
 public class OrderService {
     private Logger __logger = LoggerFactory.getLogger(getClass());
-    private static final String STOCK_SERVICE_URL = "http://localhost:8050/stock-service/check";
-    private static final String STOCK_SERVICE_URL_INCREASE  = "http://localhost:8050/stock-service/inscrease";
-    private static final String STOCK_SERVICE_URL_DECREASE = "http://localhost:8050/stock-service/decrease";// Corrigido URL de aumento de estoque
+    private static final String STOCK_SERVICE_URL = "http://localhost:8087/stock-service/check";
+    private static final String STOCK_SERVICE_URL_INCREASE  = "http://localhost:8087/stock-service/inscrease";
+    private static final String STOCK_SERVICE_URL_DECREASE = "http://localhost:8087/stock-service/decrease";// Corrigido URL de aumento de estoque
     private static final String PAYMENT_SERVICE_URL = "http://localhost:8040/payment-service/pay";
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
+    private  String reseverOrder;
 
-    public List<SagaLog> getAll() {
-            return _repo.findAll();
-    }
 
     public enum State {
         INITIATED(0),
         STOCK_VERIFIED_PENDING(1),
         RESERVE_STOCK(2),
+        STOCK_VERIFIED_ERROR(3),
+        RESERVE_STOCK_ERROR (4),
         PAYMENT_PENDING(5),
         REVERSE_ORDER(6),
         PAYMENT_COMPLETED(7),
@@ -55,68 +55,91 @@ public class OrderService {
         }
     }
 
+
+    public List<SagaLog> getAll() {
+        return _repo.findAll();
+    }
+
+
     @Autowired
     private SagaLogRepository _repo;
-    private SagaLogRepositoryPending sagaLogRepositoryPending;
+
     public MessageInfo doSaga(OrderMessage order) {
         MessageInfo messageInfo = new MessageInfo();
+        messageInfo.setError(false);
         SagaLog s = init(order);
-        String  sagaId =  s.getId();
+        String sagaId = s.getId();
         while (s.getState() != State.ORDER_COMPLETED.getValue()
                 && s.getState() != State.ERROR.getValue()) {
-            s = _repo.findById(sagaId).orElseThrow(() -> new IllegalStateException("Saga não encontrada"));
+
+            s = _repo.findById(sagaId).orElseThrow(() -> new IllegalStateException("Saga not found"));
+
             switch (State.values()[s.getState()]){
                 case INITIATED:
-                    nextState(s,State.STOCK_VERIFIED_PENDING.getValue());
+                    nextState(s, State.STOCK_VERIFIED_PENDING.getValue());
                     break;
                 case STOCK_VERIFIED_PENDING:
                     if (callServiceStock(order)) {
-                        nextState(s,State.RESERVE_STOCK.getValue());
+                        nextState(s, State.RESERVE_STOCK.getValue());
                     }else{
-                        messageInfo.setError(true);
-                        messageInfo.setMessage("Stock Error ");
-                        nextState(s,State.ERROR.getValue());
+                        messageInfo.setMessage("There is a product that is not in stock or we are unable to contact the store");
+                        nextState(s, State.ERROR.getValue());
                     }
                     break;
                 case RESERVE_STOCK:
-                    if(callServiceStockReserve(order)){
-                        nextState(s,State.PAYMENT_PENDING.getValue());
-                    }else {
-                        messageInfo.setError(true);
-                        messageInfo.setMessage("Stock Error ");
-                        nextState(s,State.ERROR.getValue());
-                    }
-                case PAYMENT_PENDING:
-                    if (callPaymentService(order))
-                        nextState(s,State.PAYMENT_COMPLETED.getValue());
-                    else {
-                        messageInfo.setError(false);
-                        messageInfo.setMessage("paymment Error ");
 
+                    if (callServiceStockReserve(order)){
+                        nextState(s, State.PAYMENT_PENDING.getValue());
+                    }else {
+                        messageInfo.setMessage("There is a product that is not in stock or we are unable to contact the store ");
                         nextState(s, State.REVERSE_ORDER.getValue());
                     }
                     break;
-                case PAYMENT_COMPLETED:
-                    nextState(s, State.ORDER_COMPLETED.getValue());
+                case PAYMENT_PENDING:
+                    if (callPaymentService(order))
+                        nextState(s, State.ORDER_COMPLETED.getValue());
+                    else {
+                        messageInfo.setError(true);
+                        messageInfo.setMessage("Payment Error ");
+                        nextState(s, State.REVERSE_ORDER.getValue());
+                    }
                     break;
                 case REVERSE_ORDER:
-                    if (callServiceStockIncrease( order )){
+                    if (callServiceStockIncrease(reseverOrder)) {
                         nextState(s, State.ERROR.getValue());
-                    }else{
-                        nextState(s, State.ERROR.getValue());
-                        Sagalog_pending sagalogPending = new Sagalog_pending();
-                        sagalogPending.setCreatedAt(s.getCreatedAt());
-                        sagalogPending.setId(s.getId());
-                        sagalogPending.setOrderInfo(s.getOrderInfo());
-                        sagalogPending.setState(s.getState());
-
-                        sagaLogRepositoryPending.save(sagalogPending);
                     }
                     break;
             }
         }
         messageInfo.setSuccess(s.getState() == State.ORDER_COMPLETED.getValue() );
         return messageInfo;
+    }
+
+
+    private boolean callServiceStockIncrease(String order) {
+
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI(STOCK_SERVICE_URL_INCREASE))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(order))
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200 ) {
+                __logger.info("Stock service ok: {}", response.body());
+                reseverOrder = response.body();
+
+                return true;
+            } else {
+                __logger.error("Error in reserve Stock: {}", response.statusCode());
+                return false;
+            }
+        } catch (Exception e) {
+            __logger.error("Error calling stock service", e);
+            return false;
+        }
     }
 
 
@@ -146,7 +169,7 @@ public class OrderService {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(STOCK_SERVICE_URL))
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(convertToJson(order.getItemLists())))
+                    .POST(HttpRequest.BodyPublishers.ofString(convertToJson(converToProductMessage(order.getItemLists()))))
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -165,21 +188,24 @@ public class OrderService {
     }
 
     private boolean callServiceStockReserve(OrderMessage order){
+
         __logger.info("Reserve Stock: {}", order);
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(STOCK_SERVICE_URL_DECREASE))
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(convertToJson(order.getItemLists())))
+                    .POST(HttpRequest.BodyPublishers.ofString(convertToJson(converToProductMessage(order.getItemLists()))))
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
+            if (response.statusCode() == 200 ) {
                 __logger.info("Stock service ok: {}", response.body());
+                reseverOrder = response.body();
+
                 return true;
             } else {
                 __logger.error("Error in reserve Stock: {}", response.statusCode());
+                reseverOrder = response.body();
                 return false;
             }
         } catch (Exception e) {
@@ -189,8 +215,17 @@ public class OrderService {
     }
 
 
+    public List<ProductMessage> converToProductMessage (List<ItemList> itemLists){
+        List<ProductMessage>  productMessages = new ArrayList<>();
+        for (ItemList itemList : itemLists){
+            productMessages.add(new ProductMessage(itemList.getId(), itemList.getName(), itemList.getDescription(), itemList.getQuantity()));
+        }
 
+        return productMessages;
+    }
+    /*
 
+     */
 
     private boolean callPaymentService(OrderMessage order) {
         __logger.info("Calling payment service for order: {}", order);
@@ -247,12 +282,11 @@ public class OrderService {
         }
     }
 
-    private String convertToJson(List<ItemList> itemLists) {
+    private String convertToJson(List<ProductMessage> itemLists) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            StockMessage stockMessage = new StockMessage();
-            stockMessage.setItems(itemLists);
-            return objectMapper.writeValueAsString(stockMessage);
+
+            return objectMapper.writeValueAsString(itemLists);
         } catch (Exception e) {
             __logger.error("Failed to convert object to JSON", e);
             return "{}";
