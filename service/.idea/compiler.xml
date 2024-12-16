@@ -10,11 +10,20 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="m4saga (7)" />
+<<<<<<< HEAD
         <module name="m4saga (6)" />
+=======
+>>>>>>> 74b90b92fb4049b9178764f081b426f3aec6507f
         <module name="m4saga (5)" />
         <module name="m4saga" />
         <module name="m4saga (2)" />
         <module name="m4saga (1)" />
+      </profile>
+      <profile name="Annotation profile for saga-demo" enabled="true">
+        <sourceOutputDir name="../stockGlobal/target/generated-sources/annotations" />
+        <sourceTestOutputDir name="../stockGlobal/target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="m4saga (6)" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -27,11 +36,16 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="m4saga" options="-parameters" />
-      <module name="m4saga (1)" options="-parameters" />
-      <module name="m4saga (2)" options="-parameters" />
+      <module name="m4saga (1)" options="" />
+      <module name="m4saga (2)" options="" />
       <module name="m4saga (3)" options="" />
+<<<<<<< HEAD
       <module name="m4saga (4)" options="" />
       <module name="m4saga (5)" options="-parameters" />
+=======
+      <module name="m4saga (4)" options="-parameters" />
+      <module name="m4saga (5)" options="" />
+>>>>>>> 74b90b92fb4049b9178764f081b426f3aec6507f
       <module name="m4saga (6)" options="-parameters" />
       <module name="m4saga (7)" options="-parameters" />
       <module name="stock" options="-parameters" />
