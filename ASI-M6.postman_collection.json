@@ -498,7 +498,8 @@
 									"    pm.response.to.have.header(\"Content-Type\");",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -521,11 +522,14 @@
 							"raw": "{\n    \"cardid\":\"4003-9410-7938-2960\",\n    \"amount\": 10,\n    \"issuer\": \"john\",\n    \"transaction\":\"CC-SD-345\"\n}"
 						},
 						"url": {
-							"raw": "localhost:8081/payment-service/pay",
+							"raw": "172.20.10.3:8040/payment-service/pay",
 							"host": [
-								"localhost"
+								"172",
+								"20",
+								"10",
+								"3"
 							],
-							"port": "8081",
+							"port": "8040",
 							"path": [
 								"payment-service",
 								"pay"

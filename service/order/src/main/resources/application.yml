@@ -1,7 +1,7 @@
 spring:
   debug: true
   datasource:
-    url: jdbc:postgresql://192.168.56.101:5437/order_service
+    url: jdbc:postgresql://order_db:5432/order_service
     username: postgres
     password: a_passwd234
     jpa:

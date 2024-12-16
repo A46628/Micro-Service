@@ -23,10 +23,10 @@ import java.util.UUID;
 @Service
 public class OrderService {
     private Logger __logger = LoggerFactory.getLogger(getClass());
-    private static final String STOCK_SERVICE_URL = "http://localhost:8087/stock-service/check";
-    private static final String STOCK_SERVICE_URL_INCREASE  = "http://localhost:8087/stock-service/inscrease";
-    private static final String STOCK_SERVICE_URL_DECREASE = "http://localhost:8087/stock-service/decrease";// Corrigido URL de aumento de estoque
-    private static final String PAYMENT_SERVICE_URL = "http://localhost:8040/payment-service/pay";
+    private static final String STOCK_SERVICE_URL = "http://stockGlobal-service:8087/stock-service/check";
+    private static final String STOCK_SERVICE_URL_INCREASE  = "http://stockGlobal-service:8087/stock-service/inscrease";
+    private static final String STOCK_SERVICE_URL_DECREASE = "http://stockGlobal-service:8087/stock-service/decrease";// Corrigido URL de aumento de estoque
+    private static final String PAYMENT_SERVICE_URL = "http://payment-service:8040/payment-service/pay";
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private  String reseverOrder;
@@ -36,13 +36,10 @@ public class OrderService {
         INITIATED(0),
         STOCK_VERIFIED_PENDING(1),
         RESERVE_STOCK(2),
-        STOCK_VERIFIED_ERROR(3),
-        RESERVE_STOCK_ERROR (4),
-        PAYMENT_PENDING(5),
-        REVERSE_ORDER(6),
-        PAYMENT_COMPLETED(7),
-        ORDER_COMPLETED(8),
-        ERROR(9);
+        PAYMENT_PENDING(3),
+        REVERSE_ORDER(4),
+        ORDER_COMPLETED(5),
+        ERROR(6);
 
         private int value;
 

@@ -1,7 +1,7 @@
 \c lojaBdb;
 
 INSERT INTO lojas (id_loja,nome_loja, url_loja, port)
-VALUES ('e4bc2f41-1bf5-4be4-ab6b-161709649ee1', 'Loja B', 'localhost', 8085);
+VALUES ('e4bc2f41-1bf5-4be4-ab6b-161709649ee1', 'Loja B', 'storeDB-service', 8085);
 
 INSERT INTO produtos (id_produto, nome_produto, descricao_produto, id_loja, stockQuantity, preco_produto)
 VALUES 

@@ -1,7 +1,7 @@
 spring:
   debug: true
   datasource:
-    url: jdbc:postgresql://192.168.56.101:5434/lojaBdb
+    url: jdbc:postgresql://asi_lojaB:5432/lojaBdb
     username: postgres
     password: asi_lojaB
     jpa:

@@ -1,7 +1,7 @@
 \c lojaAdb;
 
 INSERT INTO lojas (id_loja, nome_loja, url_loja, port)
-VALUES ('ccaae316-0dac-45e8-8751-cc3c9205f27b','Loja A','localhost', 8086);
+VALUES ('ccaae316-0dac-45e8-8751-cc3c9205f27b','Loja A','storeDA-service', 8086);
 
 INSERT INTO produtos(id_produto, nome_produto, descricao_produto, id_loja, stockQuantity, preco_produto)
 VALUES
