@@ -34,3 +34,7 @@ replay_pid*
 
 # all folders and their files, whose name starts with 'data'
 **/data*/ 
+
+
+# .DS_Store files
+.DS_Store
