@@ -34,3 +34,4 @@ replay_pid*
 
 # all folders and their files, whose name starts with 'data'
 **/data*/ 
+service/storeDB/.idea/misc.xml
