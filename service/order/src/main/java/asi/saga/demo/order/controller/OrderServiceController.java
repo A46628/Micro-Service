@@ -27,6 +27,7 @@ import asi.saga.demo.order.model.MessageInfo;
 import asi.saga.demo.order.model.OrderMessage;
 import asi.saga.demo.common.model.Result;
 import asi.saga.demo.order.model.SagaLog;
+import asi.saga.demo.order.model.Sagalog_pending;
 import asi.saga.demo.order.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -86,16 +87,12 @@ public class OrderServiceController {
         }else {
             Result res = new Result(messageInfo.getMessage(), LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
             return new ResponseEntity<>(new ObjectMapper().writeValueAsString(res), headers, HttpStatus.FOUND);
-
-
         }
 
     }
 
     @GetMapping("/order-service/{sagaId}")
     public ResponseEntity<String> createRequest(@PathVariable String sagaId) throws Exception {
-
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         Result res = new Result("Success", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
@@ -110,12 +107,21 @@ public class OrderServiceController {
     })
     @GetMapping("/order-service")
     public ResponseEntity<List<SagaLog>> getAllRequests() {
-        // process the object
         __logger.info("Getting all requests");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         List<SagaLog> result = _service.getAll();
+        return ResponseEntity.ok(result);
+    }
+
+
+    @GetMapping("/order-service-pending")
+    public ResponseEntity<List<Sagalog_pending>> getAllRequestsPending() {
+        __logger.info("Getting all requests pending");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        List<Sagalog_pending> result = _service.getAllSagaPending();
         return ResponseEntity.ok(result);
 
     }

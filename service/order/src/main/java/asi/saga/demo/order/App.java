@@ -30,9 +30,11 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 //@SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
 @SpringBootApplication
+@EnableScheduling
 @OpenAPIDefinition(
         info = @Info(
                 title = "Order Service",

@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@EnableScheduling
 @Service
 public class OrderService {
     private Logger __logger = LoggerFactory.getLogger(getClass());
@@ -61,7 +64,17 @@ public class OrderService {
     @Autowired
     private SagaLogRepository _repo;
 
+    @Autowired
+    private SagaLogRepositoryPending sagalog_pending;
+
+    @Scheduled(fixedRate = 30000) // = 30 segundos
+    public void scheduledResolvePendingSaga() {
+        __logger.info("Executing scheduled resolvePendingSaga");
+        resolvePendingSaga();
+    }
+
     public MessageInfo doSaga(OrderMessage order) {
+        //resolvePendingSaga();
         MessageInfo messageInfo = new MessageInfo();
         messageInfo.setError(false);
         SagaLog s = init(order);
@@ -102,8 +115,17 @@ public class OrderService {
                     }
                     break;
                 case REVERSE_ORDER:
+                    try {
+                        Thread.sleep(30000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     if (callServiceStockIncrease(reseverOrder)) {
                         nextState(s, State.ERROR.getValue());
+                    }else{
+                        Sagalog_pending sagalogPending1 = new Sagalog_pending(s.getId(), s.getState(), reseverOrder);
+                        nextState(s, State.ERROR.getValue());
+                        sagalog_pending.save(sagalogPending1);
                     }
                     break;
             }
@@ -111,6 +133,22 @@ public class OrderService {
         messageInfo.setSuccess(s.getState() == State.ORDER_COMPLETED.getValue() );
         return messageInfo;
     }
+
+
+
+    private void resolvePendingSaga(){
+        List<Sagalog_pending> sagalogPendings = sagalog_pending.findAll();
+        for (Sagalog_pending s : sagalogPendings){
+            if(s.getState() == State.ERROR.getValue()){
+                sagalog_pending.delete(s);
+            }else {
+                if (callServiceStockIncrease(s.getOrderInfo())){
+                    sagalog_pending.delete(s);
+                }
+            }
+        }
+    }
+
 
 
     private boolean callServiceStockIncrease(String order) {
@@ -288,5 +326,13 @@ public class OrderService {
             __logger.error("Failed to convert object to JSON", e);
             return "{}";
         }
+    }
+
+    public List<SagaLog> getAllSaga(){
+        return _repo.findAll();
+    }
+
+    public List<Sagalog_pending> getAllSagaPending(){
+        return sagalog_pending.findAll();
     }
 }
