@@ -1,3 +1,0 @@
-1)Em cada módulo, gerar, fazer o package e instalar de modo a gerar o JAR para a criação das imagens.
-2)Depois de ter gerado o JAR, existe um ficheiro chamado cmdDocker.txt para a criação das imagens, que deve ser executado em cada módulo no terminal (cmd).
-3)Depois disso, é só fazer o docker-compose up. Obs: não pode mudar o nome das imagens.

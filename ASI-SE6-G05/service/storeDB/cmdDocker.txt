@@ -1,0 +1,7 @@
+##########################################################
+                Configuration of image 
+docker build -t imagestoreb .
+
+
+
+

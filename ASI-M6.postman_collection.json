@@ -51,7 +51,8 @@
 							"path": [
 								"create-product"
 							]
-						}
+						},
+						"description": "Cria um novo produto para a loja A"
 					},
 					"response": []
 				},
@@ -70,7 +71,8 @@
 								"get-products",
 								""
 							]
-						}
+						},
+						"description": "De modo a obter todos os produtos da Loja"
 					},
 					"response": []
 				},
@@ -388,118 +390,7 @@
 					"response": []
 				},
 				{
-					"name": "Post order",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"//Check HTTP code is 200",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Content-Type is present\", function () {",
-									"    pm.response.to.have.header(\"Content-Type\");",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disabledSystemHeaders": {
-							"content-type": true
-						}
-					},
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"cardid\":\"4003-9410-7938-2960\",\n    \"issuer\": \"john\",\n    \"itemList\": [\n        {\n            \"id\":1,\n            \"description\": \"Produto 1\",\n            \"quantity\": 2,\n            \"unitPrice\": 12\n        }\n    ]\n}"
-						},
-						"url": {
-							"raw": "localhost:8082/order-service/create",
-							"host": [
-								"localhost"
-							],
-							"port": "8082",
-							"path": [
-								"order-service",
-								"create"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get all saga",
-					"request": {
-						"method": "GET",
-						"header": []
-					},
-					"response": []
-				},
-				{
-					"name": "get all saga pending",
-					"request": {
-						"method": "GET",
-						"header": []
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Order_paymment",
-			"item": [
-				{
-					"name": "Payment Service health",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"//Check HTTP code is 200",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"//Check that response time is less than 20ms",
-									"pm.test(\"Response time is less than 50ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(50);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/payment-service/healthy",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"payment-service",
-								"healthy"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Post payment order",
+					"name": "Post order 1 error payment delay 30 segundo",
 					"event": [
 						{
 							"listen": "test",
@@ -535,74 +426,85 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"cardid\":\"4003-9410-7938-2960\",\n    \"amount\": 10,\n    \"issuer\": \"john\",\n    \"transaction\":\"CC-SD-345\"\n}"
+							"raw": "{\n    \"cardid\":\"4003-9410-7938-2960\",\n    \"issuer\": \"John B Good\",\n    \"itemList\": [\n          {\n        \"id\": \"1d520c21-9a33-4652-a01b-25bc349cb316\",\n        \"name\": \"Melão\",\n        \"description\": \"Produto da Loja A\",\n        \"storeId\": \"ccaae316-0dac-45e8-8751-cc3c9205f27b\",\n        \"stockQuantity\": 50\n    },\n    {\n        \"id\": \"c66c7987-2c81-4577-be02-406702df9aee\",\n        \"name\": \"Uva\",\n        \"description\": \"Produto da Loja B\",\n        \"storeId\": \"e4bc2f41-1bf5-4be4-ab6b-161709649ee1\",\n        \"stockQuantity\": 100\n    }\n    ]\n    \n}"
 						},
 						"url": {
-							"raw": "172.20.10.3:8040/payment-service/pay",
+							"raw": "localhost:8088/order-service/create",
 							"host": [
-								"172",
-								"20",
-								"10",
-								"3"
+								"localhost"
 							],
-							"port": "8040",
+							"port": "8088",
 							"path": [
-								"payment-service",
-								"pay"
+								"order-service",
+								"create"
 							]
-						}
+						},
+						"description": "Todos os produtos existem e o pagamento mais ocorreu um erro de pagamento sem credito suficiente ."
 					},
 					"response": []
 				},
 				{
-					"name": "Post refund order",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"//Check HTTP code is 200",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Content-Type is present\", function () {",
-									"    pm.response.to.have.header(\"Content-Type\");",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disabledSystemHeaders": {
-							"content-type": true
-						}
-					},
+					"name": "Post Order 2 sucess",
 					"request": {
 						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
+						"header": [],
+						"description": "Todos os produtos disponível e credito suficiente."
+					},
+					"response": []
+				},
+				{
+					"name": "Post Order 3 error stock",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"description": "Produto não disponível em nenhuma das lojas;"
+					},
+					"response": []
+				},
+				{
+					"name": "Post Order 4",
+					"request": {
+						"method": "POST",
+						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"cardid\":\"4003-9410-7938-2960\",\n    \"amount\": 12.3,\n    \"issuer\": \"john\",\n    \"transaction\":\"CC-SD-345\"\n}"
+							"raw": "{\r\n    \"cardid\":\"4003-9410-7938-2960\",\r\n    \"issuer\": \"John B Good\",\r\n    \"itemList\": [\r\n          {\r\n            \"name\": \"Manga\",\r\n            \"unitPrice\": 20.99,\r\n            \"quantity\": 1\r\n        }\r\n    ]\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
-							"raw": "localhost:8081/payment-service/refund",
+							"raw": "localhost:8088/order-service/create",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8088",
 							"path": [
-								"payment-service",
-								"refund"
+								"order-service",
+								"create"
 							]
-						}
+						},
+						"description": "Produto disponivel na loja A e na Loja B, mais a loja A encontra se indisponível mais a reserva tem que ser feita na loja B, sem nenhum erro do sistema. é necessario desligar a Loja A ou B,"
+					},
+					"response": []
+				},
+				{
+					"name": "get all saga",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"description": "De modo a ver todas as sagas e o estado final."
+					},
+					"response": []
+				},
+				{
+					"name": "get all saga pending",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"description": "StartFragment\n\n**\"Get all Saga Pending\"**\n\nPara visualizar as sagas pendentes, é necessário seguir os seguintes passos:\n\n1. Faça um pedido, como por exemplo o **Post Order 1**.\n    \n2. Durante a execução do pedido, desligue o **Stock Service**.\n    \n    - Isso resultará em um erro no serviço de **Payment**, já que, ao tentar realizar a compensação, ocorrerá uma falha de consistência com o **Stock**.\n        \n3. A saga será finalizada com erro, mas os dados serão armazenados em uma tabela separada de sagas pendentes (**Saga Pending**).\n    \n4. Quando executar o endpoint **Get All Saga Pending**, você verá as informações relacionadas à saga armazenada.\n    \n5. Ao reativar o serviço que foi desligado, a saga será reprocessada automaticamente.\n    \n    - Após a execução bem-sucedida, ela será removida da tabela **Saga Pending**\n        \n    -"
 					},
 					"response": []
 				}
