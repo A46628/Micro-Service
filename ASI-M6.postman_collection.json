@@ -35,7 +35,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "[{\r\n  \"id\":\"123e4567-e89b-12d3-a456-426614174000\",  \r\n  \"name\": \"Melão\",                    \r\n  \"description\": \"Produto da Loja A\",  \r\n  \"price\": 199.99,                              \r\n  \"stockQuantity\": 50,                          \r\n  \"storeId\": \"3c24c285-c301-4561-a944-b5ee36ec603e\" \r\n}\r\n]\r\n\r\n",
+							"raw": "[\r\n     {\r\n        \"name\": \"Laranja \",\r\n        \"description\": \"Produto da Loja A\",\r\n        \"price\": 199.99,\r\n        \"storeId\": \"ccaae316-0dac-45e8-8751-cc3c9205f27b\",\r\n        \"stockQuantity\": 50\r\n     }\r\n   \r\n]\r\n\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -120,7 +120,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": " [\r\n    {\r\n        \"id\": \"f2daf853-7fa9-488d-9803-042c1221647c\",\r\n        \"name\": \"Manga\",\r\n        \"storeId\": \"3c24c285-c301-4561-a944-b5ee36ec603e\",\r\n        \"stockQuantity\": 50\r\n    }\r\n ]\r\n\r\n",
+							"raw": " \r\n    {\r\n        \"id\": \"f2daf853-7fa9-488d-9803-042c1221647c\",\r\n        \"name\": \"Manga\",\r\n        \"storeId\": \"ccaae316-0dac-45e8-8751-cc3c9205f27b\",\r\n        \"description\": \"Produto da Loja A\",\r\n        \"price\": 199.99,\r\n        \"stockQuantity\": 50\r\n    }\r\n \r\n\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -172,7 +172,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "    [{\r\n        \"id\":\"f9a8a3fd-7849-465a-b4f2-a14e886bcf33\",\r\n        \"name\": \"Manga\",                    \r\n        \"description\": \"Produto da Loja B\",  \r\n        \"price\": 199.99,                              \r\n        \"stockQuantity\": 50,                          \r\n        \"storeId\": \"abaac79e-349b-470f-a978-ee2ab366d88e\" \r\n    },\r\n    {\r\n        \"id\":\"e1d18e54-017b-4a93-b051-5dd96bc0befb\",\r\n        \"name\": \"Laranja de faro\",                    \r\n        \"description\": \"Produto da Loja B\",  \r\n        \"price\": 199.99,                              \r\n        \"stockQuantity\": 50,                          \r\n        \"storeId\": \"abaac79e-349b-470f-a978-ee2ab366d88e\" \r\n\r\n    }\r\n]\r\n",
+							"raw": "    [ {\r\n        \"name\": \"Abacaxi\",\r\n        \"description\": \"Produto da Loja B\",\r\n        \"storeId\": \"e4bc2f41-1bf5-4be4-ab6b-161709649ee1\",\r\n        \"stockQuantity\": 65\r\n    },\r\n    {\r\n        \"name\": \"Melancia\",\r\n        \"description\": \"Produto da Loja B\",\r\n        \"price\": 199.99,\r\n        \"storeId\": \"e4bc2f41-1bf5-4be4-ab6b-161709649ee1\",\r\n        \"stockQuantity\": 0\r\n    }\r\n]\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -235,14 +235,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:8085/delete-product/08199b7c-b970-4935-9b30-8ce7a121a37d",
+							"raw": "localhost:8085/delete-product/afe21672-da34-4706-a487-795aa66cc3fa",
 							"host": [
 								"localhost"
 							],
 							"port": "8085",
 							"path": [
 								"delete-product",
-								"08199b7c-b970-4935-9b30-8ce7a121a37d"
+								"afe21672-da34-4706-a487-795aa66cc3fa"
 							]
 						}
 					},
@@ -255,7 +255,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"id\": \"afe21672-da34-4706-a487-795aa66cc3fa\",\r\n        \"name\": \"Manga\",\r\n        \"description\": \"Produto da Loja B\",\r\n        \"price\": 199.99,\r\n        \"storeId\": \"e4bc2f41-1bf5-4be4-ab6b-161709649ee1\",\r\n        \"stockQuantity\": 50\r\n}\r\n",
+							"raw": "{\r\n        \"id\": \"afe21672-da34-4706-a487-795aa66cc3fa\",\r\n        \"name\": \"Manga\",\r\n        \"description\": \"Produto da Loja B\",\r\n        \"price\": 199.99,\r\n        \"storeId\": \"e4bc2f41-1bf5-4be4-ab6b-161709649ee1\",\r\n        \"stockQuantity\": 90\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -325,7 +325,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n     {\r\n        \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\r\n        \"name\": \"Melão\",\r\n        \"description\": \"Produto da Loja A\",\r\n        \"price\": 199.99,\r\n        \"storeId\": \"3c24c285-c301-4561-a944-b5ee36ec603e\",\r\n        \"stockQuantity\": 50\r\n    },\r\n     {\r\n        \"id\": \"f9a8a3fd-7849-465a-b4f2-a14e886bcf33\",\r\n        \"name\": \"Manga\",\r\n        \"description\": \"Produto da Loja B\",\r\n        \"storeId\": \"abaac79e-349b-470f-a978-ee2ab366d88e\",\r\n        \"stockQuantity\": 50\r\n    }\r\n]",
+							"raw": "[\r\n     {\r\n        \"name\": \"Melão\",\r\n        \"stockQuantity\": 50\r\n    },\r\n     {\r\n        \"name\": \"Manga\",\r\n        \"stockQuantity\": 50\r\n    }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -368,19 +368,32 @@
 									"    pm.expect(pm.response.responseTime).to.be.below(50);",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "localhost:8082/order-service/healthy",
+							"raw": "localhost:8088/order-service/healthy",
 							"host": [
 								"localhost"
 							],
-							"port": "8082",
+							"port": "8088",
 							"path": [
 								"order-service",
 								"healthy"
@@ -426,7 +439,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"cardid\":\"4003-9410-7938-2960\",\n    \"issuer\": \"John B Good\",\n    \"itemList\": [\n          {\n        \"id\": \"1d520c21-9a33-4652-a01b-25bc349cb316\",\n        \"name\": \"Melão\",\n        \"description\": \"Produto da Loja A\",\n        \"storeId\": \"ccaae316-0dac-45e8-8751-cc3c9205f27b\",\n        \"stockQuantity\": 50\n    },\n    {\n        \"id\": \"c66c7987-2c81-4577-be02-406702df9aee\",\n        \"name\": \"Uva\",\n        \"description\": \"Produto da Loja B\",\n        \"storeId\": \"e4bc2f41-1bf5-4be4-ab6b-161709649ee1\",\n        \"stockQuantity\": 100\n    }\n    ]\n    \n}"
+							"raw": "{\n    \"cardid\":\"5112-4872-3228-9994\",\n    \"issuer\": \"John B Good\",\n    \"itemList\": [\n          {\n            \"name\": \"Manga\",\n            \"unitPrice\": 20.99,\n            \"quantity\": 5\n        },\n        {\n            \"name\":\"Pera\",\n            \"unitPrice\": 20.99,\n            \"quantity\": 5\n        }\n    ]\n    \n}"
 						},
 						"url": {
 							"raw": "localhost:8088/order-service/create",
@@ -448,6 +461,26 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cardid\":\"4003-9410-7938-2960\",\r\n    \"issuer\": \"John B Good\",\r\n    \"itemList\": [\r\n          {\r\n            \"name\": \"Manga\",\r\n            \"unitPrice\": 20.99,\r\n            \"quantity\": 1\r\n        },\r\n        {\r\n            \"name\":\"Pera\",\r\n            \"unitPrice\": 20.99,\r\n            \"quantity\": 1\r\n        }\r\n    ]\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8088/order-service/create",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"order-service",
+								"create"
+							]
+						},
 						"description": "Todos os produtos disponível e credito suficiente."
 					},
 					"response": []
@@ -457,6 +490,26 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cardid\":\"4003-9410-7938-2960\",\r\n    \"issuer\": \"John B Good\",\r\n    \"itemList\": [\r\n          {\r\n            \"name\": \"Pessego\",\r\n            \"unitPrice\": 20.99,\r\n            \"quantity\": 500\r\n        },\r\n        {\r\n            \"name\":\"Pera\",\r\n            \"unitPrice\": 20.99,\r\n            \"quantity\": 5\r\n        }\r\n    ]\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8088/order-service/create",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"order-service",
+								"create"
+							]
+						},
 						"description": "Produto não disponível em nenhuma das lojas;"
 					},
 					"response": []
@@ -495,6 +548,16 @@
 					"request": {
 						"method": "GET",
 						"header": [],
+						"url": {
+							"raw": "localhost:8088/order-service",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"order-service"
+							]
+						},
 						"description": "De modo a ver todas as sagas e o estado final."
 					},
 					"response": []
@@ -504,6 +567,16 @@
 					"request": {
 						"method": "GET",
 						"header": [],
+						"url": {
+							"raw": "localhost:8088/order-service-pending",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"order-service-pending"
+							]
+						},
 						"description": "StartFragment\n\n**\"Get all Saga Pending\"**\n\nPara visualizar as sagas pendentes, é necessário seguir os seguintes passos:\n\n1. Faça um pedido, como por exemplo o **Post Order 1**.\n    \n2. Durante a execução do pedido, desligue o **Stock Service**.\n    \n    - Isso resultará em um erro no serviço de **Payment**, já que, ao tentar realizar a compensação, ocorrerá uma falha de consistência com o **Stock**.\n        \n3. A saga será finalizada com erro, mas os dados serão armazenados em uma tabela separada de sagas pendentes (**Saga Pending**).\n    \n4. Quando executar o endpoint **Get All Saga Pending**, você verá as informações relacionadas à saga armazenada.\n    \n5. Ao reativar o serviço que foi desligado, a saga será reprocessada automaticamente.\n    \n    - Após a execução bem-sucedida, ela será removida da tabela **Saga Pending**\n        \n    -"
 					},
 					"response": []
